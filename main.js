@@ -116,7 +116,7 @@
               width:100%;
               height:100%;
               background: rgba(0, 0, 0, 0.7);
-              z-index:9999;
+              z-index:900;
              align-items:center;
              justify-content:center;
               }
@@ -142,6 +142,8 @@
       border-radius:10px;
       background-color:white;
       padding:10px 60px;
+                    z-index:9999;
+
       }
 
       ${spinMain} {
@@ -257,13 +259,15 @@
      padding:10px;
      background-color:white;
       position: fixed;
-        border-radius: 50%;
+      padding:18px;
         height: 300px;
         width: 300px;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
          text-align:center;
+        z-index:2000;
+
   }
 
      ${codeTextDiv}{
@@ -355,7 +359,7 @@
      </div>
     
      `;
-    $("body").append(html);
+    // $("body").append(html);
 
     const {
       imgUrl,
@@ -419,16 +423,16 @@
   };
 
   self.events = () => {
-    const { spinButton, closeButton } = selectors;
+    const { spinButton, closeButton, mainModal } = selectors;
 
     $(spinButton).on("click", () => {
       self.spinWheel();
     });
 
-    $(closeButton).on("click", () => {
+    $(document).on("click", closeButton, () => {
       console.log("tıklandı");
 
-      $(".mainModal").remove();
+      $(mainModal).remove();
     });
   };
   self.init();
