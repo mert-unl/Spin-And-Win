@@ -17,8 +17,7 @@
       privacyText:
         "By checking this box, you agree to our Terms of Use and consent to our <b>Privacy Policy *<b>",
       buttonText: "Spin",
-      winnerDiscount: 10,
-      whellDiscounts: [19, 85, 30, 55, 40, 20, 25, 90],
+      whellDiscounts: [99, 85, 30, 55, 40, 20, 25, 90],
       colors: [
         "#33C1FF",
         "#FF33A6",
@@ -473,7 +472,6 @@ ${errorText}{
           <p class="${codeArea}">${coupon}</p>
           <button class="${codeCopyButton}" >${copyText}</button>
         </div>
-    
      </div>
      </div>
     `;
@@ -491,9 +489,10 @@ ${errorText}{
     const minSpeed = 0.1;
 
     const animate = () => {
-      currentRotation += speed;
+      currentRotation = currentRotation + speed;
       $wheel.css("transform", `rotate(${currentRotation}deg)`);
-      speed *= friction;
+
+      speed = speed * friction;
 
       if (speed > minSpeed) {
         requestAnimationFrame(animate);
@@ -520,8 +519,6 @@ ${errorText}{
     } = selectors;
 
     const { myLocalStorage } = config.storage;
-
-    let emails = JSON.parse(localStorage.getItem(myLocalStorage)) || [];
 
     const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const checkForm = () => {
