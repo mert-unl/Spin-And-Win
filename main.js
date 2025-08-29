@@ -16,7 +16,7 @@
         "By checking this box, you agree to our Terms of Use and consent to our <b>Privacy Policy *<b>",
       buttonText: "Spin",
       winnerDiscount: 10,
-      whellDiscounts: [1, 85, 30, 55, 40, 20, 25, 90],
+      whellDiscounts: [19, 85, 30, 55, 40, 20, 25, 90],
       colors: [
         "#33C1FF",
         "#FF33A6",
@@ -33,7 +33,7 @@
       codeCloseText: "x",
       imgUrl:
         "https://www.citypng.com/public/uploads/preview/emoji-face-smiling-heart-eye-red-love-romantic-704081694792375rc8iksdb5p.png",
-      title: "YOU WON!",
+      title: "YOU WON",
       date: "20.01.2026",
       text: "Here is your discount code you can use in your next order. This coupon will be valid until 20.01.2026",
       coupon: "@dasdadsada",
@@ -54,7 +54,8 @@
     mainModal: "mrt-main-modal",
     overlay: "mrt-ins-overlay",
     closeButton: "mrt-ins-close-button",
-
+    emailInput: "mrt-email-input",
+    checkboxInput: "mrt-checkbox-input",
     codeOverlay: "asdfxzs",
     codeModalMain: "asdasda",
     codeCloseButton: "asdasdadffv",
@@ -64,6 +65,7 @@
     codeTextDiv: "dsddccc",
     codeArea: "adlaşlda",
     codeCopyButton: "llfdşflsşdlfs",
+    errorText: "aerrrroe",
   };
 
   const selectors = Object.keys(classes).reduce((createdSelector, key) => {
@@ -109,6 +111,7 @@
       codeCopyButton,
       codeOverlay,
       codeCloseButton,
+      errorText,
     } = selectors;
     const customStyle = `
     <style>
@@ -215,6 +218,15 @@
        display:flex;
        flex-direction:column;
       }
+${errorText}{
+ font-family:Arial;
+ color:red;
+ text-align:center;
+ margin-top:10px;
+ padding:5px;
+ font-weight:bold;
+ font-size:16px;
+}
 
       ${checkBoxDiv}{
       display:flex;
@@ -258,87 +270,85 @@
           }
 
 
-      /*coupon Modal*/
+       /*coupon Modal*/
 
-${codeOverlay}{
-   display:flex;
-     position: fixed;
-              top:0;
-              left:0;
-              width:100%;
-              height:100%;
-              background: rgba(0, 0, 0, 0.7);
-              z-index:900;
-             align-items:center;
-             justify-content:center;
-}
+        ${codeOverlay}{
+          display:none;
+          position: fixed;
+          top:0;
+          left:0;
+          width:100%;
+          height:100%;
+          background: rgba(0, 0, 0, 0.7);
+          z-index:900;
+          align-items:center;
+          justify-content:center;
+        }
 
 
-  ${codeModalMain}{
-     font-family:Arial
-     padding:10px;
-     background-color:white;
-      position: fixed;
-      padding:18px;
-        width: 500px;
-        border-radius:6px;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-         text-align:center;
-        z-index:2000;
+        ${codeModalMain}{
+          font-family:Arial;
+          background-color:white;
+          position: fixed;
+          padding:10px 30px;
+          width: 450px;
+          border-radius:6px;
+          top: 45%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          text-align:center;
+          z-index:2000;
+        }
 
-  }
+        ${codeCloseButton}{
+            cursor:pointer;
+            border:none;
+            font-size:16px;
+            font-family:Arial;
+            background-color:white;
+            color:red;
+            font-weight:bold;
+            position:absolute;
+            top:10px;
+            right:10px;
+            margin:0;
+         }
 
-  ${codeCloseButton}{
-       cursor:pointer;
-      border:none;
-      font-size:16px;
-      font-family:Arial;
-      background-color:white;
-      color:red;
-      font-weight:bold;
-      position:absolute;
-      top:10px;
-      right:10px;
-      margin:0;
-     }
+          ${codeImg}{
+          height:250px;
+          }
 
-    ${codeImg}{
-    height:250px;
-    }
+          ${codeTitle}{
+          font-family:Arial;
+          font-size:25px;
+          font-weight:bold;
+          }
 
-    ${codeTitle}{
-     font-family:Arial;
-     font-size:25px;
-     font-weight:bold;
-    }
+          ${codeUpperText}{
+            color:gray;
+            font-family:Arial;
+          }
 
-    ${codeUpperText}{
-      color:gray;
-      font-family:Arial;
-    }
-
-     ${codeTextDiv}{
-       display:flex;
-      flex-direction:row;
-      justify-content:center;
-      align-items:center;
-      gap:1reM;
-     }
+          ${codeTextDiv}{
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            align-items:center;
+            gap:1reM;
+          }
  
 
-     ${codeCopyButton}{
-       border:none;
-          background: #048bfaff;
-          color:white;
-          font-size:14px;
-          width:30%;
-          border-radius:5px;
-          font-weight:bold;
-          height:46px;
-     }
-   
+        ${codeCopyButton}{
+          border:none;
+              background: #048bfaff;
+              color:white;
+              font-size:14px;
+              width:30%;
+              border-radius:5px;
+              font-weight:bold;
+              height:46px;
+        }
+      
             ${codeCopyButton}:hover{
               cursor:pointer;
               background: #0069beff;
@@ -373,8 +383,13 @@ ${codeOverlay}{
       mainModal,
       overlay,
       closeButton,
+      emailInput,
+      checkboxInput,
+      errorText,
     } = classes;
     const pizzaCount = config.spinSection.whellDiscounts.length;
+
+    config.codeSection.title = `YOU WON <b>${config.spinSection.whellDiscounts[0]}%</b> DISCOUNT!`;
 
     const pizzaItems = Array.from({ length: pizzaCount }, (_, i) => {
       const angle = i * (360 / pizzaCount);
@@ -407,21 +422,22 @@ ${codeOverlay}{
 
       <div  class="${emailDiv}"> 
           <p>${config.spinSection.emailUpperText}</p>
-          <input type="email" placeholder="${config.spinSection.placeHolderText}"/>
-      </div>
+          <input type="email" class="${emailInput}" placeholder="${config.spinSection.placeHolderText}"/>
+          <div class="${errorText}"></div>
+          </div>
      
       <div class="${checkBoxDiv}">
-        <input type="checkbox">
+        <input type="checkbox" class="${checkboxInput}">
         <p >${config.spinSection.privacyText}</p>
       </div>
 
-         <button class="${spinButton}">${config.spinSection.buttonText}</button>
+         <button class="${spinButton}" disabled>${config.spinSection.buttonText}</button>
       </div>
      </div>
      </div>
     
      `;
-    //$("body").append(html);
+    $("body").append(html);
 
     const {
       imgUrl,
@@ -468,8 +484,8 @@ ${codeOverlay}{
     const $wheel = $(pizzaContent);
 
     let currentRotation = 0;
-    let speed = 8;
-    const friction = 0.998;
+    let speed = 7.2;
+    const friction = 0.99;
     const minSpeed = 0.1;
 
     const animate = () => {
@@ -493,12 +509,56 @@ ${codeOverlay}{
       closeButton,
       codeOverlay,
       codeCloseButton,
-      mainModal,
       overlay,
+      emailInput,
+      checkboxInput,
+      errorText,
     } = selectors;
 
+    const { myLocalStorage } = config.storage;
+
+    let emails = JSON.parse(localStorage.getItem(myLocalStorage)) || [];
+
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const checkForm = () => {
+      if (
+        isValidEmail($(emailInput).val()) &&
+        $(checkboxInput).is(":checked")
+      ) {
+        $(spinButton).prop("disabled", false);
+      } else {
+        $(spinButton).prop("disabled", true);
+      }
+    };
+
+    $(emailInput).on("input", checkForm);
+    $(checkboxInput).on("change", checkForm);
+
+    self.saveEmail = (email) => {
+      let emails = JSON.parse(localStorage.getItem(myLocalStorage)) || [];
+
+      if (emails.includes(email)) {
+        $(errorText).text("You already got your code with this email!");
+        return false;
+      }
+
+      emails.push(email);
+      localStorage.setItem(myLocalStorage, JSON.stringify(emails));
+
+      return true;
+    };
+
     $(spinButton).on("click", () => {
-      self.spinWheel();
+      const email = $(emailInput).val();
+
+      if (self.saveEmail(email)) {
+        self.spinWheel();
+
+        setTimeout(() => {
+          $(overlay).remove();
+          $(codeOverlay).fadeIn();
+        }, 3500);
+      }
     });
 
     $(document).on("click", closeButton, () => {
