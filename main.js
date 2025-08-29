@@ -2,7 +2,9 @@
   "use strict";
 
   const config = {
-    api: {},
+    api: {
+      url: "https://randomdata.azurewebsites.net/api/NewAlphabets/10",
+    },
     storage: {
       myLocalStorage: "mertLocalStorage",
     },
@@ -32,7 +34,7 @@
     codeSection: {
       codeCloseText: "x",
       imgUrl:
-        "https://www.citypng.com/public/uploads/preview/emoji-face-smiling-heart-eye-red-love-romantic-704081694792375rc8iksdb5p.png",
+        "https://thumbs.dreamstime.com/b/love-emoji-face-love-emotion-icon-d-smile-vector-happy-95758155.jpg",
       title: "YOU WON",
       date: "20.01.2026",
       text: "Here is your discount code you can use in your next order. This coupon will be valid until 20.01.2026",
@@ -76,7 +78,7 @@
   self.init = () => {
     !window.jQuery
       ? self.loadJquery()
-      : (self.buildHtml(), self.buildCss(), self.events());
+      : (self.buildHtml(), self.buildCss(), self.events(), self.fetch());
   };
 
   self.loadJquery = () => {
@@ -513,6 +515,8 @@ ${errorText}{
       emailInput,
       checkboxInput,
       errorText,
+      codeArea,
+      codeCopyButton,
     } = selectors;
 
     const { myLocalStorage } = config.storage;
@@ -572,6 +576,25 @@ ${errorText}{
 
       $(codeOverlay).remove();
     });
+
+    $(document).on("click", codeCopyButton, () => {
+      const couponText = $(codeArea).text();
+      navigator.clipboard.writeText(couponText);
+      console.log("kopyalandı: " + couponText);
+    });
+
+    self.fetch = () => {
+      return fetch(config.api.url)
+        .then((response) => response.json())
+        .then((data) => {
+          config.codeSection.coupon = data;
+          $(codeArea).text(data);
+
+          console.log("API response:", data);
+          return data;
+        })
+        .catch((err) => console.error("Fetch error:", err));
+    };
   };
   self.init();
 })({});
