@@ -30,7 +30,9 @@
     },
 
     codeSection: {
-      imgUrl: "",
+      codeCloseText: "x",
+      imgUrl:
+        "https://www.citypng.com/public/uploads/preview/emoji-face-smiling-heart-eye-red-love-romantic-704081694792375rc8iksdb5p.png",
       title: "YOU WON!",
       date: "20.01.2026",
       text: "Here is your discount code you can use in your next order. This coupon will be valid until 20.01.2026",
@@ -53,7 +55,9 @@
     overlay: "mrt-ins-overlay",
     closeButton: "mrt-ins-close-button",
 
+    codeOverlay: "asdfxzs",
     codeModalMain: "asdasda",
+    codeCloseButton: "asdasdadffv",
     codeImg: "asdadadd",
     codeTitle: "asdadasdd",
     codeUpperText: "sdaşlsdalsdşasda",
@@ -103,6 +107,8 @@
       codeTextDiv,
       codeArea,
       codeCopyButton,
+      codeOverlay,
+      codeCloseButton,
     } = selectors;
     const customStyle = `
     <style>
@@ -254,15 +260,29 @@
 
       /*coupon Modal*/
 
+${codeOverlay}{
+   display:flex;
+     position: fixed;
+              top:0;
+              left:0;
+              width:100%;
+              height:100%;
+              background: rgba(0, 0, 0, 0.7);
+              z-index:900;
+             align-items:center;
+             justify-content:center;
+}
+
+
   ${codeModalMain}{
      font-family:Arial
      padding:10px;
      background-color:white;
       position: fixed;
       padding:18px;
-        height: 300px;
-        width: 300px;
-        top: 50%;
+        width: 500px;
+        border-radius:6px;
+        top: 40%;
         left: 50%;
         transform: translate(-50%,-50%);
          text-align:center;
@@ -270,10 +290,41 @@
 
   }
 
+  ${codeCloseButton}{
+       cursor:pointer;
+      border:none;
+      font-size:16px;
+      font-family:Arial;
+      background-color:white;
+      color:red;
+      font-weight:bold;
+      position:absolute;
+      top:10px;
+      right:10px;
+      margin:0;
+     }
+
+    ${codeImg}{
+    height:250px;
+    }
+
+    ${codeTitle}{
+     font-family:Arial;
+     font-size:25px;
+     font-weight:bold;
+    }
+
+    ${codeUpperText}{
+      color:gray;
+      font-family:Arial;
+    }
+
      ${codeTextDiv}{
        display:flex;
       flex-direction:row;
-
+      justify-content:center;
+      align-items:center;
+      gap:1reM;
      }
  
 
@@ -282,14 +333,25 @@
           background: #048bfaff;
           color:white;
           font-size:14px;
-          width:50%;
+          width:30%;
           border-radius:5px;
           font-weight:bold;
+          height:46px;
      }
    
             ${codeCopyButton}:hover{
               cursor:pointer;
               background: #0069beff;
+            }
+
+            ${codeArea}{
+              border:1px dashed gray;
+              padding:12px;
+              width:70%;
+              border-radius:4px;
+              font-size:18px;
+              background-color: #f7f3f38c;
+              color:#0069beff;
             }
 
     </style>
@@ -359,7 +421,7 @@
      </div>
     
      `;
-    // $("body").append(html);
+    //$("body").append(html);
 
     const {
       imgUrl,
@@ -368,6 +430,7 @@
       text,
       coupon,
       copyText,
+      codeCloseText,
     } = config.codeSection;
 
     const {
@@ -378,21 +441,23 @@
       codeTextDiv,
       codeArea,
       codeCopyButton,
+      codeOverlay,
+      codeCloseButton,
     } = classes;
     const codeModal = `
+    <div class=${codeOverlay}>
      <div class="${codeModalMain}">
-     
+     <button class=${codeCloseButton}>${codeCloseText}</button>
      <img  class="${codeImg}" src="${imgUrl}" />
-      <h3 class="${codeTitle}" >${codeTitleText}</h3>
-      <p class="${codeUpperText}" >${text}</p>
-      <div class="${codeTextDiv}">
-        <p class="${codeArea}">${coupon}</p>
-        <button class="${codeCopyButton}" >${copyText}</button>
-      </div>
-     
-     
+        <h3 class="${codeTitle}" >${codeTitleText}</h3>
+        <p class="${codeUpperText}" >${text}</p>
+        <div class="${codeTextDiv}">
+          <p class="${codeArea}">${coupon}</p>
+          <button class="${codeCopyButton}" >${copyText}</button>
+        </div>
+    
      </div>
-     
+     </div>
     `;
 
     $("body").append(codeModal);
@@ -423,7 +488,14 @@
   };
 
   self.events = () => {
-    const { spinButton, closeButton, mainModal } = selectors;
+    const {
+      spinButton,
+      closeButton,
+      codeOverlay,
+      codeCloseButton,
+      mainModal,
+      overlay,
+    } = selectors;
 
     $(spinButton).on("click", () => {
       self.spinWheel();
@@ -432,7 +504,13 @@
     $(document).on("click", closeButton, () => {
       console.log("tıklandı");
 
-      $(mainModal).remove();
+      $(overlay).remove();
+    });
+
+    $(document).on("click", codeCloseButton, () => {
+      console.log("tıklandı");
+
+      $(codeOverlay).remove();
     });
   };
   self.init();
