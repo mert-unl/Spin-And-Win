@@ -17,16 +17,16 @@
       privacyText:
         "By checking this box, you agree to our Terms of Use and consent to our <b>Privacy Policy *<b>",
       buttonText: "Spin",
-      whellDiscounts: [99, 85, 30, 55, 40, 20, 25, 90],
+      whellDiscounts: [12, 85, 30, 55, 40, 20, 25, 90],
       colors: [
         "#33C1FF",
         "#FF33A6",
         "#8DFF33",
-        "#FFC133",
-        "#9B33FF",
+        "#ffee00ff",
+        "#ab52ffff",
         "#11be37ff",
-        "#FF8C33",
-        "#FF5733",
+        "#ff923eff",
+        "#ff2121ff",
       ],
     },
 
@@ -57,16 +57,16 @@
     closeButton: "mrt-ins-close-button",
     emailInput: "mrt-email-input",
     checkboxInput: "mrt-checkbox-input",
-    codeOverlay: "asdfxzs",
-    codeModalMain: "asdasda",
-    codeCloseButton: "asdasdadffv",
-    codeImg: "asdadadd",
-    codeTitle: "asdadasdd",
-    codeUpperText: "sdaşlsdalsdşasda",
-    codeTextDiv: "dsddccc",
-    codeArea: "adlaşlda",
-    codeCopyButton: "llfdşflsşdlfs",
-    errorText: "aerrrroe",
+    codeOverlay: "mrt-ins-code-overlay",
+    codeModalMain: "mrt-ins-code-modal-main",
+    codeCloseButton: "mrt-ins-code-close-button",
+    codeImg: "mrt-ins-code-img",
+    codeTitle: "mrt-ins-code-title",
+    codeUpperText: "mrt-ins-code-upper-text",
+    codeTextDiv: "mrt-ins-code-text-div",
+    codeArea: "mrt-ins-code-area",
+    codeCopyButton: "mrt-ins-code-copy-button",
+    errorText: "mrt-ins-error-text",
   };
 
   const selectors = Object.keys(classes).reduce((createdSelector, key) => {
@@ -120,16 +120,16 @@
 
       ${overlay}{
       display:flex;
-     position: fixed;
-              top:0;
-              left:0;
-              width:100%;
-              height:100%;
-              background: rgba(0, 0, 0, 0.7);
-              z-index:900;
-             align-items:center;
-             justify-content:center;
-              }
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index:900;
+      align-items:center;
+      justify-content:center;
+      }
             
      ${closeButton}{
       cursor:pointer;
@@ -201,40 +201,41 @@
        }
 
  
-      ${discount}{
-      display:flex;
-       font-size:20px;
-       font-weight:bold;
-       font-family:Arial;
-       justify-content:center;
-      }
+          ${discount}{
+          display:flex;
+          font-size:20px;
+          font-weight:bold;
+          font-family:Arial;
+          justify-content:center;
+          }
 
 
-       ${title}{
-        text-align:center;
-        font-family:Arial;
-       }
+          ${title}{
+            text-align:center;
+            font-family:Arial;
+          }
 
-      ${emailDiv}{
-       display:flex;
-       flex-direction:column;
-      }
-${errorText}{
- font-family:Arial;
- color:red;
- text-align:center;
- margin-top:10px;
- padding:5px;
- font-weight:bold;
- font-size:16px;
-}
+          ${emailDiv}{
+              display:flex;
+              flex-direction:column;
+           }
+          
+          ${errorText}{
+          font-family:Arial;
+          color:red;
+          text-align:center;
+          margin-top:10px;
+          padding:5px;
+          font-weight:bold;
+          font-size:16px;
+          }
 
-      ${checkBoxDiv}{
-      display:flex;
-      flex-direction:row;
-      gap:0.5rem;
-      max-width:400px;
-      }
+          ${checkBoxDiv}{
+          display:flex;
+          flex-direction:row;
+          gap:0.5rem;
+          max-width:400px;
+          }
 
         ${checkBoxDiv} input{
           cursor:pointer;
@@ -388,53 +389,56 @@ ${errorText}{
       checkboxInput,
       errorText,
     } = classes;
-    const pizzaCount = config.spinSection.whellDiscounts.length;
 
-    config.codeSection.title = `YOU WON <b>${config.spinSection.whellDiscounts[0]}%</b> DISCOUNT!`;
+    const { whellDiscounts, colors } = config.spinSection;
+
+    const pizzaCount = whellDiscounts.length;
+    config.codeSection.title = `YOU WON <b>${whellDiscounts[0]}%</b> DISCOUNT!`;
 
     const pizzaItems = Array.from({ length: pizzaCount }, (_, i) => {
       const angle = i * (360 / pizzaCount);
-      const color = config.spinSection.colors[i] || "orange";
+      const color = colors[i] || "orange";
       return `
       <div class="${pizza}" style="transform: rotate(${angle}deg) translateY(-75px); background-color: ${color};">
-      <p class="${discount}">${config.spinSection.whellDiscounts[i]}%</p>
+      <p class="${discount}">${whellDiscounts[i]}%</p>
       
       </div>`;
     }).join("");
 
-    const carkifelek = `<div class="${spinMain}">
-    <div class="${stick}"></div>
-    <div class="${pizzaContent}">
-    ${pizzaItems}
-    </div>
+    const carkifelek = `
+    <div class="${spinMain}">
+      <div class="${stick}"></div>
+      <div class="${pizzaContent}">
+      ${pizzaItems}
+      </div>
     </div>`;
 
     const html = `
     <div class="${overlay}">
    <div class="${mainModal}">
     <button class="${closeButton}">${config.spinSection.closeButton}</button>
+
+    
     <div style="justify-content:center; display:flex; flex-direction:column; align-items:center;">
+      ${carkifelek}
+      <div style="margin-top:420px;">
         
+        <h2 class="${title}">${config.spinSection.title}</h2>
 
-    ${carkifelek}
-     <div style="margin-top:420px;">
+        <div  class="${emailDiv}"> 
+            <p>${config.spinSection.emailUpperText}</p>
+            <input type="email" class="${emailInput}" placeholder="${config.spinSection.placeHolderText}"/>
+            <div class="${errorText}"></div>
+            </div>
       
-      <h2 class="${title}">${config.spinSection.title}</h2>
+        <div class="${checkBoxDiv}">
+          <input type="checkbox" class="${checkboxInput}">
+          <p >${config.spinSection.privacyText}</p>
+        </div>
 
-      <div  class="${emailDiv}"> 
-          <p>${config.spinSection.emailUpperText}</p>
-          <input type="email" class="${emailInput}" placeholder="${config.spinSection.placeHolderText}"/>
-          <div class="${errorText}"></div>
-          </div>
-     
-      <div class="${checkBoxDiv}">
-        <input type="checkbox" class="${checkboxInput}">
-        <p >${config.spinSection.privacyText}</p>
+          <button class="${spinButton}" disabled>${config.spinSection.buttonText}</button>
+        </div>
       </div>
-
-         <button class="${spinButton}" disabled>${config.spinSection.buttonText}</button>
-      </div>
-     </div>
      </div>
     
      `;
@@ -443,7 +447,6 @@ ${errorText}{
     const {
       imgUrl,
       title: codeTitleText,
-      date,
       text,
       coupon,
       copyText,
@@ -562,6 +565,9 @@ ${errorText}{
       }
     });
 
+    //element on load
+    //mutation observer
+
     $(document).on("click", closeButton, () => {
       console.log("tıklandı");
 
@@ -586,7 +592,6 @@ ${errorText}{
         .then((data) => {
           config.codeSection.coupon = data;
           $(codeArea).text(data);
-
           console.log("API response:", data);
           return data;
         })
